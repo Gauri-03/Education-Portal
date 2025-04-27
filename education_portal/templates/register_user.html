@@ -1,0 +1,192 @@
+{% extends 'base.html' %} {% block title %}Register Educator{% endblock %}{%
+  block navbar %} {% endblock %}{% block content %}
+    
+  </head>
+  <body
+  style="
+    background-image: url('/static/login_background.png');
+    background-size: cover;
+    height: 100vh;
+  "
+>
+    <div class="container">
+      <form method="POST">
+        <h2>Register User</h2>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirm_password"
+            name="confirm_password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="qualification">Qualification</label>
+          <input
+            type="text"
+            class="form-control"
+            id="qualification"
+            name="qualification"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input
+            type="date"
+            class="form-control"
+            id="dob"
+            name="dob"
+            required
+          />
+        </div>
+        <button type="submit" class="button-confirm">Sign Up →</button>
+        <p class="text-center">
+          Already have an account?
+          <a href="{{ url_for('auth.login') }}">Login</a>
+        </p>
+        <p class="text-center">
+          Want to register as an educator?
+          <a href="{{ url_for('auth.register_educator') }}">Click Here!</a>
+        </p>
+      </form>
+    </div>
+    <style>
+      /* Color scheme from the checkout UI */
+      :root {
+        --primary-color: rgba(16, 86, 82, 0.75);
+        --background-color: #f8f5ed;
+        --input-bg: rgb(251, 243, 228);
+        --input-focus-bg: rgb(201, 193, 178);
+        --button-bg: rgba(16, 86, 82, 0.55);
+        --border-color: rgb(16, 86, 82);
+      }
+
+      body {
+        background-color: var(--background-color);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 0;
+      }
+
+      form {
+        width: 480px;
+        background: var(--background-color);
+        border-radius: 19px;
+        box-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+          0px 47px 47px rgba(0, 0, 0, 0.09);
+        padding: 30px;
+      }
+
+      h2 {
+        margin-bottom: 30px;
+        font-weight: 700;
+        font-size: 24px;
+        color: #000000;
+        position: relative;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--primary-color);
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--primary-color);
+      }
+
+      .form-control {
+        width: 100%;
+        height: 42px;
+        padding: 0 0 0 16px;
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid var(--border-color);
+        background-color: var(--input-bg);
+        transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+
+      .form-control:focus {
+        border: 1px solid transparent;
+        box-shadow: 0px 0px 0px 2px var(--primary-color);
+        background-color: var(--input-focus-bg);
+      }
+
+      .button-confirm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 42px;
+        background: var(--button-bg);
+        box-shadow: 0px 0.5px 0.5px var(--primary-color),
+          0px 1px 0.5px var(--primary-color);
+        border-radius: 7px;
+        border: 1px solid var(--border-color);
+        color: #000000;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .button-confirm:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .text-center {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #000000;
+      }
+
+      .text-center a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .text-center a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </body>
+    {% endblock %}

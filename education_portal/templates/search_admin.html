@@ -1,0 +1,147 @@
+{% extends "base.html" %} {% block title %}Admin Search{% endblock %} {% block
+content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .card-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .subject-card {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .subject-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 16px;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .btn-edit {
+    background-color: var(--primary-color);
+    color: white;
+  }
+</style>
+
+<br />
+<div class="container">
+  <h2 class="section-title">Admin Search</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 card-wrapper">
+      <div class="card subject-card">
+        <div class="card-body">
+          <h5 class="card-title">Search for Data</h5>
+          <form method="POST" action="{{ url_for('admin.search') }}">
+            <div class="form-group mb-3">
+              <label for="search" class="form-label">Search Query</label>
+              <input
+                type="search"
+                class="form-control"
+                id="search"
+                name="search"
+                placeholder="Enter a keyword"
+                required
+              />
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label d-block">Search By:</label>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="search_type"
+                  id="user"
+                  value="user"
+                  required
+                />
+                <label class="form-check-label" for="user">Users</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="search_type"
+                  id="educator"
+                  value="educator"
+                />
+                <label class="form-check-label" for="educator">Educators</label>
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-edit btn-block">
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br /><br />
+{% endblock %}

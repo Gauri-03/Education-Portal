@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %}Admin - Educators{% endblock %} {%
+block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .subjects-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .subject-card {
+    width: 300px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .subject-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+  }
+
+  .card-text {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+
+  .card-actions {
+    padding: 0 20px 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="section-title">Educators</h4>
+      <div class="row subjects-container">
+        {% for educator in educators %}
+        <div class="col-md-4 col-sm-6 mb-4 card-wrapper">
+          <div class="card subject-card">
+            <div class="card-body">
+              <h5 class="card-title">{{ educator.fullname }}</h5>
+              <p class="card-text">{{ educator.username }}</p>
+            </div>
+            <div class="card-actions">
+              <a class="btn" href="/adminhome/view_educator/{{ educator.id }}"
+                >View Details</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<br /><br />
+{% endblock %}

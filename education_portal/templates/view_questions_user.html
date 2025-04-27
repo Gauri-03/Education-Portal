@@ -1,0 +1,252 @@
+{% extends "base.html" %} {% block title %}Take Quiz{% endblock %} {% block
+navbar %}
+<style>
+  .custom-navbar {
+    background-color: #e0f2f1;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    padding: 12px 24px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .brand-logo {
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--primary-color);
+    transition: color 0.3s;
+    text-decoration: none;
+  }
+
+  .brand-logo:hover {
+    color: black;
+    text-decoration: none;
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(16, 86, 82, 0.8)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+  .nav-link {
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+  }
+
+  .nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+  }
+
+  .logout-btn {
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: black;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .navbar-nav {
+    align-items: center;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <a class="navbar-brand brand-logo" href="/userhome/{{ user.id }}">
+    Quiz Master
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbar"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbar">
+    <div class="navbar-nav">
+      {% block navlinks %}
+      <a class="nav-item nav-link" href="/userhome/{{ user.id }}">Home</a>
+      <a class="nav-item nav-link" href="/userhome/{{ user.id }}/stats"
+        >Stats</a
+      >
+      <a class="nav-item nav-link" href="/userhome/my_subjects/{{ user.id }}"
+        >My Subjects</a
+      >
+      <a class="nav-item nav-link" href="/userhome/library/{{ user.id }}"
+        >My Library</a
+      >
+      <a class="nav-item nav-link logout-btn" href="/">Logout</a>
+
+      {% endblock %}
+    </div>
+  </div>
+</nav>
+{% endblock %}{% block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .quiz-container {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 30px;
+  }
+
+  .question-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .question-card:hover {
+    box-shadow: 0px 12px 26px rgba(0, 0, 0, 0.3),
+      0px 47px 47px rgba(0, 0, 0, 0.25);
+  }
+
+  .question-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  .options-container {
+    margin-top: 20px;
+  }
+
+  .form-check {
+    margin-bottom: 10px;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+
+  .form-check-label {
+    font-size: 16px;
+    color: #333;
+  }
+</style>
+
+<div class="container mt-4">
+  <h4 class="section-title text-center">Take Your Quiz</h4>
+  <div class="quiz-container p-4">
+    <form
+      method="POST"
+      action="{{ url_for('user.submit_quiz', quiz_id=quiz.id, user_id=user.id) }}"
+    >
+      {% for question in questions %}
+      <div class="question-card mb-4 p-3">
+        <h5 class="question-text">{{ question.statement }}</h5>
+        <div class="options-container">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="option_a_{{question.id}}"
+              name="question_{{question.id}}"
+              value="{{question.option_a}}"
+            />
+            <label class="form-check-label" for="option_a_{{question.id}}"
+              >{{ question.option_a }}</label
+            >
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="option_b_{{question.id}}"
+              name="question_{{question.id}}"
+              value="{{question.option_b}}"
+            />
+            <label class="form-check-label" for="option_b_{{question.id}}"
+              >{{ question.option_b }}</label
+            >
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="option_c_{{question.id}}"
+              name="question_{{question.id}}"
+              value="{{question.option_c}}"
+            />
+            <label class="form-check-label" for="option_c_{{question.id}}"
+              >{{ question.option_c }}</label
+            >
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="option_d_{{question.id}}"
+              name="question_{{question.id}}"
+              value="{{question.option_d}}"
+            />
+            <label class="form-check-label" for="option_d_{{question.id}}"
+              >{{ question.option_d }}</label
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="text-center">
+        <button type="submit" class="btn btn-success btn-lg">
+          Submit Quiz
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

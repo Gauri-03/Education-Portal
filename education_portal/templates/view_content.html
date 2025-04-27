@@ -1,0 +1,160 @@
+{% extends "base.html" %} {% block title %}Chapter Content{% endblock %} {%
+block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .content-card {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    margin: 0 auto;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .content-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .content-text {
+    font-size: 16px;
+    color: #000000;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 14px;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .btn-edit {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .btn-edit:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="section-title">Chapter Content</h4>
+      <div class="content-card">
+        <p class="content-text">{{ content }}</p>
+        <button
+          type="button"
+          class="btn btn-edit"
+          data-toggle="modal"
+          data-target="#editContentModal{{ chapter.id }}"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Content Modal -->
+<div
+  class="modal fade"
+  id="editContentModal{{ chapter.id }}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editContentModalTitle{{ chapter.id }}"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editContentModalTitle{{ chapter.id }}">
+          Update Chapter Content
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form
+          method="POST"
+          action="{{ url_for('admin.update_content', subject_id=subject.id, educator_id=educator.id, chapter_id=chapter.id) }}"
+        >
+          <div class="form-group">
+            <label for="content{{ chapter.id }}">Update Content</label>
+            <textarea
+              class="form-control"
+              id="content{{ chapter.id }}"
+              name="content"
+              rows="6"
+              required
+            >
+{{ chapter.content }}</textarea
+            >
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br /><br />
+{% endblock %}

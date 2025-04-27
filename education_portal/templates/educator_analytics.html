@@ -1,0 +1,254 @@
+{% extends "base.html" %} {% block navbar %}
+<style>
+  .custom-navbar {
+    background-color: #e0f2f1;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    padding: 12px 24px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .brand-logo {
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--primary-color);
+    transition: color 0.3s;
+    text-decoration: none;
+  }
+
+  .brand-logo:hover {
+    color: black;
+    text-decoration: none;
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(16, 86, 82, 0.8)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+  .nav-link {
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+  }
+
+  .nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+  }
+
+  .logout-btn {
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: black;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .navbar-nav {
+    align-items: center;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <a class="navbar-brand brand-logo" href="/educatorhome/{{ educator.id }}"
+    >EduLink</a
+  >
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbar"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbar">
+    <div class="navbar-nav">
+      {% block navlinks %}
+      <a class="nav-item nav-link" href="/educatorhome/{{ educator.id }}"
+        >Home</a
+      >
+      <a class="nav-item nav-link" href="/educatorhome/search/{{ educator.id }}"
+        >Search</a
+      >
+      <a
+        class="nav-item nav-link"
+        href="/educatorhome/analytics/{{ educator.id }}"
+        >Stats</a
+      >
+      <a class="nav-item nav-link" href="/educatorhome/{{ educator.id }}"
+        >Subjects</a
+      >
+      <a class="nav-item nav-link logout-btn" href="/">Logout</a>
+      {% endblock %}
+    </div>
+  </div>
+</nav>
+{% endblock %} {% block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .card-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .create-subject-card {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .create-subject-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 16px;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+
+<div class="container mt-5">
+  <h2 class="section-title">Analytics</h2>
+
+  <hr />
+
+  <h3>User Leaderboard</h3>
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 card-wrapper">
+      <div class="card create-subject-card">
+        <div class="card-body">
+          <table class="table table-striped mt-3">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>User Name</th>
+                <th>Total Score</th>
+                <th>Subjects Enrolled</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in leaderboard %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ entry.user.name }}</td>
+                <td>{{ entry.total_score }}</td>
+                <td>{{ entry.subject_count }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <h3>Subject Popularity</h3>
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 card-wrapper">
+      <div class="card create-subject-card">
+        <div class="card-body">
+          <table class="table table-bordered mt-3">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Subject Name</th>
+                <th>Students Enrolled</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for subject, count in popular_subjects %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ subject.name }}</td>
+                <td>{{ count }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="/educatorhome/{{ educator.id }}" class="btn btn-primary"
+      >Back to Dashboard</a
+    >
+  </div>
+</div>
+{% endblock %}

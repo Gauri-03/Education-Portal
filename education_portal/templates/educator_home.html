@@ -1,0 +1,368 @@
+{% extends "base.html" %} {% block head %}{% endblock %} {% block title
+%}Educator Home{% endblock %} {% block navbar %}
+<style>
+  .custom-navbar {
+    background-color: #e0f2f1;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    padding: 12px 24px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .brand-logo {
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--primary-color);
+    transition: color 0.3s;
+    text-decoration: none;
+  }
+
+  .brand-logo:hover {
+    color: black;
+    text-decoration: none;
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(16, 86, 82, 0.8)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+  .nav-link {
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+  }
+
+  .nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+  }
+
+  .logout-btn {
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: black;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .navbar-nav {
+    align-items: center;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <a class="navbar-brand brand-logo" href="/educatorhome/{{ educator.id }}"
+    >EduLink</a
+  >
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbar"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbar">
+    <div class="navbar-nav">
+      {% block navlinks %}
+      <a class="nav-item nav-link" href="/educatorhome/{{ educator.id }}"
+        >Home</a
+      >
+      <a class="nav-item nav-link" href="/educatorhome/search/{{ educator.id }}"
+        >Search</a
+      >
+      <a
+        class="nav-item nav-link"
+        href="/educatorhome/analytics/{{ educator.id }}"
+        >Stats</a
+      >
+      <a class="nav-item nav-link" href="/educatorhome/{{ educator.id }}"
+        >Subjects</a
+      >
+      <a class="nav-item nav-link logout-btn" href="/">Logout</a>
+      {% endblock %}
+    </div>
+  </div>
+</nav>
+{% endblock %} {% block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .subjects-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .subject-card {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .subject-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+  }
+
+  .card-text {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+
+  .card-actions {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    /* gap: 10px; */
+  }
+
+  .card-actions a,
+  .card-actions button {
+    margin: 5px;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="section-title">Existing Subjects</h4>
+      <div class="row subjects-container">
+        {% for subject in subjects %}
+        <div class="col-md-4 col-sm-6 mb-4 card-wrapper">
+          <div class="card subject-card">
+            <div class="card-body">
+              <h5 class="card-title">{{ subject.name }}</h5>
+              <p class="card-text">{{ subject.description }}</p>
+              <div class="card-actions">
+                <button
+                  type="button"
+                  class="btn btn-edit"
+                  data-toggle="modal"
+                  data-target="#editSubjectModal{{ subject.id }}"
+                >
+                  Edit
+                </button>
+                <a
+                  class="btn"
+                  href="{{ url_for('educator.view_chapters_edu', educator_id=educator.id, subject_id=subject.id) }}"
+                >
+                  Chapters
+                </a>
+                <a
+                  class="btn"
+                  href="{{ url_for('educator.view_quizzes_edu', educator_id=educator_id, subject_id=subject.id) }}"
+                >
+                  Quizzes
+                </a>
+                <form
+                  method="POST"
+                  action="{{ url_for('educator.delete_subject_edu', educator_id=educator_id, subject_id=subject.id) }}"
+                  class="d-inline"
+                  onsubmit="return confirm('Are you sure you want to delete this subject?');"
+                >
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="editSubjectModal{{ subject.id }}"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="editSubjectModalTitle{{ subject.id }}"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5
+                    class="modal-title"
+                    id="editSubjectModalTitle{{ subject.id }}"
+                  >
+                    Update Existing Subject
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form
+                    method="POST"
+                    action="{{ url_for('educator.update_subject_edu', subject_id=subject.id, educator_id=educator_id) }}"
+                  >
+                    <div class="form-group">
+                      <label for="name{{ subject.id }}"
+                        >Update Subject Name</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name{{ subject.id }}"
+                        name="name"
+                        value="{{ subject.name }}"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="description{{ subject.id }}"
+                        >Update Subject Description</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="description{{ subject.id }}"
+                        name="description"
+                        value="{{ subject.description }}"
+                        required
+                      />
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+      <div class="card create-subject-card">
+        <div class="card-body">
+          <h4 class="card-title text-center">Create New Subject</h4>
+          <form
+            method="POST"
+            action="{{ url_for('educator.create_subject', educator_id=educator_id) }}"
+          >
+            <div class="form-group">
+              <label for="name">Subject Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="Enter subject name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="description">Subject Description</label>
+              <input
+                type="text"
+                class="form-control"
+                id="description"
+                name="description"
+                placeholder="Enter subject description"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+</div>
+{% endblock %}

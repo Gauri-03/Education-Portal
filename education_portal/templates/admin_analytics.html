@@ -1,0 +1,215 @@
+{% extends "base.html" %} {% block title %}Admin Analytics{% endblock %} {%
+block content %}
+<style>
+  :root {
+    --primary-color: rgba(16, 86, 82, 0.75);
+    --background-color: #f8f5ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 47px 47px rgba(0, 0, 0, 0.09);
+    --border-color: rgb(16, 86, 82);
+    --button-bg: rgba(16, 86, 82, 0.55);
+  }
+
+  body {
+    background-color: var(--background-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .stats-card {
+    width: 300px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .stats-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stats-card h4 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+  }
+
+  .stats-card p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .stats-highlight {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .stats-highlight h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .stats-highlight .text-success {
+    color: #28a745;
+  }
+
+  .stats-highlight .text-danger {
+    color: #dc3545;
+  }
+
+  .table-responsive {
+    margin-top: 40px;
+  }
+
+  .table-dark {
+    background-color: rgba(16, 86, 82, 0.75);
+    color: white;
+  }
+
+  .table td,
+  .table th {
+    text-align: center;
+  }
+
+  .btn {
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 14px;
+  }
+
+  .btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+
+<div class="container mt-4">
+  <h1 class="text-center section-title">Admin Analytics</h1>
+
+  <!-- User Analytics Section -->
+  <div class="stats-container">
+    <div class="stats-card">
+      <h4>Total Users</h4>
+      <p>{{ total_users }}</p>
+    </div>
+    <div class="stats-card">
+      <h4>Best Performing User</h4>
+      <p class="text-success">{{ best_user if best_user else "N/A" }}</p>
+    </div>
+    <div class="stats-card">
+      <h4>Weakest User</h4>
+      <p class="text-danger">{{ worst_user if worst_user else "N/A" }}</p>
+    </div>
+  </div>
+  <br />
+
+  <!-- Most Popular Subject Section -->
+  <div class="stats-container mb-4">
+    <div class="stats-card">
+      <h4>Most Popular Subject</h4>
+      <p class="text-primary">
+        {{ most_popular_subject if most_popular_subject else "N/A" }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Educator Analytics Section -->
+  <div class="stats-container">
+    <div class="stats-card">
+      <h4>Best Performing Educator</h4>
+      <p class="text-success">
+        {{ best_educator if best_educator else "N/A" }}
+      </p>
+    </div>
+    <div class="stats-card">
+      <h4>Weakest Educator</h4>
+      <p class="text-danger">
+        {{ worst_educator if worst_educator else "N/A" }}
+      </p>
+    </div>
+  </div>
+
+  <!-- User Average Scores Table -->
+  <div class="table-responsive mt-4">
+    <h3 class="text-center">User Average Scores</h3>
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Username</th>
+          <th>Average Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user, avg_score in user_avg_scores.items() %}
+        <tr>
+          <td>{{ user }}</td>
+          <td><strong>{{ avg_score }}</strong></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2" class="text-muted">No user score data available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Educator Performance Table (Optional) -->
+  <div class="table-responsive mt-4">
+    <h3 class="text-center">Educator Average Scores</h3>
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Educator Name</th>
+          <th>Average Student Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for educator, avg_score in educator_scores.items() %}
+        <tr>
+          <td>{{ educator }}</td>
+          <td><strong>{{ avg_score }}</strong></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2" class="text-muted">
+            No educator score data available.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
