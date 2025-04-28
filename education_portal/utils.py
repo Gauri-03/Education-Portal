@@ -1,7 +1,6 @@
 from datetime import date
 from flask_bcrypt import Bcrypt
-from models import User, Educator, Subject, Chapter, Quiz, Question, Admin
-
+from models import User, Educator, Subject, Chapter, Quiz, Question
 bcrypt = Bcrypt()
 
 users = [

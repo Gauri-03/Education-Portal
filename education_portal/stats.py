@@ -111,9 +111,15 @@ def educator_analytics(educator_id):
     if not educator:
         flash("Educator not found!", category="error")
         return redirect("/")
+
+    # Get all subjects created by this educator
     subjects = Subject.query.filter_by(educator_id=educator_id).all()
     subject_ids = [subject.id for subject in subjects]
+
+    # Get all enrollments for these subjects
     enrollments = Enrollment.query.filter(Enrollment.subject_id.in_(subject_ids)).all()
+
+    # Build user scores
     user_scores = {}
     for enrollment in enrollments:
         user_id = enrollment.user_id
@@ -124,14 +130,32 @@ def educator_analytics(educator_id):
                 "total_score": 0,
                 "subject_count": 0
             }
-        user_scores[user_id]["total_score"] += enrollment.score 
         user_scores[user_id]["subject_count"] += 1
+
+    # Now fetch the scores separately, properly
+    scores = (
+        db.session.query(Score)
+        .join(Quiz, Score.quiz_id == Quiz.id)
+        .filter(Quiz.subject_id.in_(subject_ids))
+        .all()
+    )
+
+    for score in scores:
+        user_id = score.user_id
+        if user_id in user_scores:
+            user_scores[user_id]["total_score"] += score.marks
+
+    # Create leaderboard
     leaderboard = sorted(user_scores.values(), key=lambda x: x["total_score"], reverse=True)
+
+    # Calculate subject popularity
     subject_popularity = {}
     for subject in subjects:
         count = Enrollment.query.filter_by(subject_id=subject.id).count()
         subject_popularity[subject] = count
+
     popular_subjects = sorted(subject_popularity.items(), key=lambda x: x[1], reverse=True)
+
     return render_template("educator_analytics.html",
                            educator=educator,
                            leaderboard=leaderboard,
